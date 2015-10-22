@@ -15,8 +15,8 @@ class CodeLinesCounter {
     filterCodeLines(trimmedLines)
   }
 
-  def printResult(lines: List[String]): Unit = {
-    print(lines.size)
+  def printResult(message: String, lines: List[String]): Unit = {
+    print(message + lines.size)
   }
 
   private def readFile(path: String): BufferedSource = {
@@ -32,8 +32,13 @@ class CodeLinesCounter {
   private def trim(strings: List[String]) = strings.map(_.trim)
 
   private def filterCodeLines(lines: List[String]): List[String] = {
-    val withoutSingleLineComments = filterSingleLineComments(lines)
+    val withoutEmptyLines = filterEmptyLines(lines)
+    val withoutSingleLineComments = filterSingleLineComments(withoutEmptyLines)
     filterMultilineComments(withoutSingleLineComments)
+  }
+
+  private def filterEmptyLines(lines: List[String]): List[String] = {
+    lines.filterNot(l => l.isEmpty)
   }
 
   private def filterSingleLineComments(lines: List[String]): List[String] = {
